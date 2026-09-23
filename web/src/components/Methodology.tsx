@@ -1,0 +1,18 @@
+import { useEffect, useRef } from 'react';
+
+export function Methodology({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => { if (open && !dialog.current?.open) dialog.current?.showModal(); else if (!open) dialog.current?.close(); }, [open]);
+  return <dialog ref={dialog} aria-labelledby="method-title" onClose={onClose} onClick={e => { if (e.target === dialog.current) { const r = dialog.current.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) onClose(); } }}>
+    <div className="dialog-top"><span className="eyebrow">BEHIND THE SIGNALS</span><button className="icon-button" aria-label="Close methodology" onClick={onClose}>×</button></div>
+    <h2 id="method-title">A signal is a starting point.</h2>
+    <p>PitchShift asks whether a pitcher’s recent pitches differ enough from their own preceding baseline to warrant a scouting review. It is an independent research project, unaffiliated with MLB or a team.</p>
+    <h3>1. Compare like with like</h3><p>Compare the last 100 or 200 tracked pitches with up to 500 immediately preceding pitches. Windows never overlap. At least 300 baseline pitches and the full selected recent window are required. Pitch-type measurements need 50 baseline and 20 recent observations. This is a selected cohort, not full MLB coverage.</p>
+    <h3>2. Put baseball size before statistical noise</h3><p>A screen needs both a minimum practical change and an approximate 95% difference interval that excludes zero. Practical thresholds: velocity 0.8 mph; movement 1.5 inches; release point 1 inch; usage 8 percentage points; zone rate 10 points; whiff rate 12 points. These are transparent research choices, not validated prediction cutoffs.</p>
+    <h3>3. Use the correct denominator</h3><p>Usage is a share of all typed pitches in the window. Platoon usage uses pitches to that batter side. Zone rate uses valid pitch locations and batter-specific strike-zone bounds. Whiff rate is swinging strikes divided by swings, including foul tips; it is not whiffs per pitch. Every comparison lists its actual sample sizes.</p>
+    <h3>4. Keep uncertainty visible</h3><p>Physical measurements use independent-sample mean intervals; rates use intervals based on binomial uncertainty. Repeated pitches within games are correlated, and many metrics are screened at once. The intervals are approximate and are not corrected for multiple comparisons. A “signal” is a review flag, never a probability that a pitcher changed. Rankings measure change strength, not confidence.</p>
+    <h3>5. Respect the tracking data</h3><p>Statcast movement and release coordinates are converted from feet to inches. Charts use the catcher’s perspective; positive horizontal coordinates are to the catcher’s right. Induced vertical movement excludes gravity. Starting in 2026, location is measured at the middle of home plate for ABS, so this dataset never pools location data across seasons.</p>
+    <h3>Read the whole story</h3><p>Pitch classification changes, opponent mix, counts, weather, parks, and tracking calibration can produce apparent shifts. A rolling window identifies a difference, not the exact date of a mechanical change. Use video and subsequent outings before acting. Plot points may be sampled; statistical comparisons use every eligible observation.</p>
+    <p style={{ marginTop: 18 }}><a href="https://baseballsavant.mlb.com/csv-docs" target="_blank" rel="noreferrer">Statcast field definitions ↗</a> · <a href="https://github.com/fzxt/PitchShift" target="_blank" rel="noreferrer">Reproduce the analysis ↗</a></p>
+  </dialog>;
+}

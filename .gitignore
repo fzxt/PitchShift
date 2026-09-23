@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+dist/
+data/raw/
+data/cache/
+.local/
+*.log
+*.zip
+.DS_Store

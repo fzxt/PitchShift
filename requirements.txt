@@ -1,0 +1,3 @@
+# The analysis and CSV ingestion use Python's standard library.
+# Install this only to enable the optional Neon Postgres persistence step.
+psycopg[binary]>=3.2,<4
