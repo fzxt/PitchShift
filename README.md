@@ -2,7 +2,8 @@
 
 **Has this pitcher changed something recently that our scouting report should account for?**
 
-<img width="1641" height="1234" alt="image" src="https://github.com/user-attachments/assets/cd93fcaf-3404-4363-8aad-cde35cb02741" />
+<img width="1574" height="1269" alt="image" src="https://github.com/user-attachments/assets/d037c86b-6c13-4cc6-abf2-f853bd11df82" />
+
 
 
 PitchShift compares a pitcher's last 100 or 200 Statcast pitches with the immediately preceding 500. It surfaces meaningful changes in velocity, pitch movement, release point, pitch usage, zone rate and whiff rate for advance scouting.
