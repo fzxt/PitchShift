@@ -31,6 +31,8 @@ To rebuild the report from the checked-in September 22, 2026 data:
 python -m pitchshift.pipeline
 ```
 
+On Windows, stop the Vite server first if its watcher holds the current JSON open, then restart `npm run dev`. The pipeline retries transient file locks and preserves the previous snapshot if replacement is blocked.
+
 To download current public 2026 Statcast data for the configured pitcher cohort:
 
 ```powershell
@@ -41,13 +43,13 @@ The public data source requires no API credential. This refresh uses a rolling 1
 
 ## Credentials the owner needs
 
-| Task | Required account or credential |
-| --- | --- |
-| View the deployed app, run it locally, reproduce its checked-in data | None |
-| Fetch public Statcast CSV data | None |
-| Own the repository and publish on GitHub Pages | A GitHub account with repository administration access |
-| Run the provided GitHub Actions workflow | GitHub supplies its job token and Pages OIDC identity automatically; no personal access token needs to be created |
-| Persist analysis and pitches in Neon | An optional PostgreSQL connection URL for a Neon Free project |
+| Task                                                                 | Required account or credential                                                                                    |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| View the deployed app, run it locally, reproduce its checked-in data | None                                                                                                              |
+| Fetch public Statcast CSV data                                       | None                                                                                                              |
+| Own the repository and publish on GitHub Pages                       | A GitHub account with repository administration access                                                            |
+| Run the provided GitHub Actions workflow                             | GitHub supplies its job token and Pages OIDC identity automatically; no personal access token needs to be created |
+| Persist analysis and pitches in Neon                                 | An optional PostgreSQL connection URL for a Neon Free project                                                     |
 
 For Neon, the same connection URL has two destinations: local `.env` as `DATABASE_URL`, and the repository Actions secret `NEON_DATABASE_URL`. The workflow maps the latter to `DATABASE_URL` for its Python process. Never add this credential to a `VITE_` variable, source control, or `web/public`.
 

@@ -24,7 +24,7 @@ COLUMNS = (
     'home_team', 'away_team', 'inning_topbot', 'release_spin_rate', 'release_extension', 'arm_angle',
 )
 REQUIRED = {'game_date', 'game_pk', 'at_bat_number', 'pitch_number', 'pitcher', 'pitch_type', 'release_speed', 'pfx_x', 'pfx_z', 'description'}
-USER_AGENT = 'Mozilla/5.0 (compatible; PitchShift/1.0; public baseball research)'
+USER_AGENT = 'Mozilla/5.0'
 
 
 def read_csv(path: Path) -> list[dict]:

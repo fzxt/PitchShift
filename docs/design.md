@@ -34,15 +34,15 @@ The comparison disclosure exposes all eligible measurements, approximate interva
 
 The initial cohort is deliberately small enough to inspect and reproduce locally:
 
-| Latest observed team | Pitchers |
-|---|---|
-| Toronto | Dylan Cease, Max Scherzer, José Soriano, Trey Yesavage |
-| Chicago Cubs | Kevin Gausman |
-| Los Angeles Dodgers | Tarik Skubal |
-| Philadelphia | Cristopher Sánchez, Zack Wheeler |
-| New York Yankees | Max Fried |
-| Minnesota | Taj Bradley |
-| Pittsburgh | Paul Skenes |
+| Latest observed team | Pitchers                                               |
+| -------------------- | ------------------------------------------------------ |
+| Toronto              | Dylan Cease, Max Scherzer, José Soriano, Trey Yesavage |
+| Chicago Cubs         | Kevin Gausman                                          |
+| Los Angeles Dodgers  | Tarik Skubal                                           |
+| Philadelphia         | Cristopher Sánchez, Zack Wheeler                       |
+| New York Yankees     | Max Fried                                              |
+| Minnesota            | Taj Bradley                                            |
+| Pittsburgh           | Paul Skenes                                            |
 
 These labels come from the downloaded 2026 games, not career associations. A traded pitcher's baseline may include another team. The first public source set spans June 1–September 22, 2026; per-pitcher dates remain more informative than the overall cutoff. A 100-pitch window can span weeks after a gap in appearances, so “recent” always means recent pitches, not a fixed number of calendar days.
 
@@ -78,11 +78,11 @@ All current comparisons stay within 2026. The [Statcast field definitions](https
 
 ## Deliberate tradeoffs
 
-| Choice | Benefit | Cost |
-|---|---|---|
-| Frozen public JSON | Consistent, shareable reports and a static deployment | Updates require a refreshed snapshot and publication. |
-| Device-local watchlist | Useful follow-up workflow with no account setup | Saved choices do not synchronize across devices. |
-| Markdown export | Readable, portable evidence with provenance | It is a text report rather than a PDF image of the charts. |
-| Native SVG charts | Small dependency surface and transparent plotting logic | Custom axis behavior and accessibility need direct maintenance. |
-| Two precomputed recent windows | Fast comparison and a clear producer/consumer contract | Arbitrary user-defined windows require pipeline changes. |
-| Selected 2026 cohort | Bounded data, reproducibility and focused research | Findings cannot be described as MLB-wide monitoring. |
+| Choice                         | Benefit                                                 | Cost                                                            |
+| ------------------------------ | ------------------------------------------------------- | --------------------------------------------------------------- |
+| Frozen public JSON             | Consistent, shareable reports and a static deployment   | Updates require a refreshed snapshot and publication.           |
+| Device-local watchlist         | Useful follow-up workflow with no account setup         | Saved choices do not synchronize across devices.                |
+| Markdown export                | Readable, portable evidence with provenance             | It is a text report rather than a PDF image of the charts.      |
+| Native SVG charts              | Small dependency surface and transparent plotting logic | Custom axis behavior and accessibility need direct maintenance. |
+| Two precomputed recent windows | Fast comparison and a clear producer/consumer contract  | Arbitrary user-defined windows require pipeline changes.        |
+| Selected 2026 cohort           | Bounded data, reproducibility and focused research      | Findings cannot be described as MLB-wide monitoring.            |

@@ -16,16 +16,16 @@ flowchart LR
 
 ## Boundaries and ownership
 
-| Layer | Source | Responsibility |
-|---|---|---|
-| Acquisition | `pitchshift/ingest.py`, `data/snapshots/` | Retrieve and validate source CSVs; retain a compressed reproducible input and provenance. |
-| Analysis | `pitchshift/analytics.py` | Order pitches, form comparison windows and calculate the versioned report. |
-| Orchestration | `pitchshift/pipeline.py` | Rebuild from the packaged input or refresh from Savant, optionally persist privately, then atomically replace public JSON. |
-| Private persistence | `pitchshift/database.py`, `sql/schema.sql` | Upsert retained pitches and report snapshots inside the dedicated `pitchshift` schema. |
-| Public contract | `web/src/types.ts` | Describe reports, pitcher windows, comparisons, chart points and date-level velocity summaries. |
-| Application state | `web/src/App.tsx` | Load the report, select a pitcher/window, filter the watchboard and manage a device-local watchlist. |
-| Presentation | `web/src/components/`, `web/src/format.ts` | Render scouting cards and SVG charts, format units, explain methodology and export Markdown. |
-| Build | `vite.config.js` | Build `web/` into `dist/` with relative asset paths for a GitHub Pages project URL. |
+| Layer               | Source                                     | Responsibility                                                                                                             |
+| ------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Acquisition         | `pitchshift/ingest.py`, `data/snapshots/`  | Retrieve and validate source CSVs; retain a compressed reproducible input and provenance.                                  |
+| Analysis            | `pitchshift/analytics.py`                  | Order pitches, form comparison windows and calculate the versioned report.                                                 |
+| Orchestration       | `pitchshift/pipeline.py`                   | Rebuild from the packaged input or refresh from Savant, optionally persist privately, then atomically replace public JSON. |
+| Private persistence | `pitchshift/database.py`, `sql/schema.sql` | Upsert retained pitches and report snapshots inside the dedicated `pitchshift` schema.                                     |
+| Public contract     | `web/src/types.ts`                         | Describe reports, pitcher windows, comparisons, chart points and date-level velocity summaries.                            |
+| Application state   | `web/src/App.tsx`                          | Load the report, select a pitcher/window, filter the watchboard and manage a device-local watchlist.                       |
+| Presentation        | `web/src/components/`, `web/src/format.ts` | Render scouting cards and SVG charts, format units, explain methodology and export Markdown.                               |
+| Build               | `vite.config.js`                           | Build `web/` into `dist/` with relative asset paths for a GitHub Pages project URL.                                        |
 
 There is no application server in the deployed request path. Opening a report reads `data/pitchshift.json` relative to Vite's base URL. Switching pitchers, filtering charts and changing between the two precomputed windows operate on that loaded document.
 

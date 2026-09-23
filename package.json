@@ -9,7 +9,9 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "check": "tsc --noEmit",
-    "test": "python -m unittest discover -s tests -v"
+    "test": "python -m unittest discover -s tests -v",
+    "format": "prettier --write web/src web/styles.css web/index.html *.md docs/*.md *.json vite.config.js .github/workflows/*.yml",
+    "format:check": "prettier --check web/src web/styles.css web/index.html *.md docs/*.md *.json vite.config.js .github/workflows/*.yml"
   },
   "engines": {
     "node": ">=22.12"

@@ -11,4 +11,5 @@ data/cache/
 .local/
 *.log
 *.zip
+*.tmp
 .DS_Store
