@@ -1,0 +1,92 @@
+name: Build, refresh and deploy PitchShift
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: Download fresh 2026 Statcast data before deploying
+        type: boolean
+        default: false
+  schedule:
+    - cron: '30 11 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pitchshift-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - name: Python analytical and data-boundary tests
+        run: python -m unittest discover -s tests -v
+      - name: Refresh public data and optionally sync private Neon storage
+        if: github.event_name == 'schedule' || inputs.refresh == true
+        env:
+          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+        shell: bash
+        run: |
+          if [ -n "$DATABASE_URL" ]; then
+            python -m pip install -r requirements.txt
+            python -m pitchshift.pipeline --refresh --sync-db
+          else
+            python -m pitchshift.pipeline --refresh
+          fi
+      - name: Keep refreshed analysis in source control
+        if: github.event_name == 'schedule' || inputs.refresh == true
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add web/public/data/pitchshift.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh public Statcast analysis snapshot'
+            git push origin HEAD:main
+          fi
+      - name: Preserve exact refresh inputs briefly for reproducibility
+        if: github.event_name == 'schedule' || inputs.refresh == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: statcast-refresh-inputs
+          path: |
+            data/raw/latest.csv
+            data/raw/latest.provenance.json
+          retention-days: 3
+      - run: npm run check
+      - name: Verify public snapshot
+        run: python scripts/validate_snapshot.py
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

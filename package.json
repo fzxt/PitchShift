@@ -11,7 +11,19 @@
     "check": "tsc --noEmit",
     "test": "python -m unittest discover -s tests -v"
   },
-  "engines": { "node": ">=22.12" },
-  "dependencies": { "react": "19.3.0", "react-dom": "19.3.0" },
-  "devDependencies": { "@vitejs/plugin-react": "6.1.1", "vite": "8.3.0", "typescript": "~5.9.3", "@types/react": "^19.2.0", "@types/react-dom": "^19.2.0" }
+  "engines": {
+    "node": ">=22.12"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "prettier": "^3.9.9",
+    "typescript": "~5.9.3",
+    "vite": "8.3.0"
+  }
 }

@@ -36,17 +36,17 @@ export function VelocityTimeline({ pitcher, type }: ChartProps) {
   if (!data.length) return <p className="empty-state">Not enough velocity data for this pitch.</p>;
   const dates = [...new Set(data.map(p => p.date))].sort();
   const start = Date.parse(dates[0]), end = Date.parse(dates.at(-1)!);
-  const min = Math.floor(Math.min(...data.map(p => p.velocity)) - 1), max = Math.ceil(Math.max(...data.map(p => p.velocity)) + 1);
+  const min = Math.floor(Math.min(...data.map(p => p.velocity!)) - 1), max = Math.ceil(Math.max(...data.map(p => p.velocity!)) + 1);
   const x = (d: string) => left + (end === start ? .5 : (Date.parse(d) - start) / (end - start)) * (width - left - right);
   const y = (n: number) => height - bottom - (n - min) / Math.max(1, max - min) * (height - bottom - top);
-  const recentX = Math.min(width - right, Math.max(left, x(pitcher.recentStart)));
+  const recentX = Math.min(width - right, Math.max(left, x(pitcher.recentStart || dates[0])));
   const labels = [...new Set([dates[0], dates[Math.floor((dates.length - 1) / 2)], dates.at(-1)!])];
-  return <svg className="plot" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Mean pitch velocity by outing for ${pitcher.name}`}>
-    <title>Velocity by outing, colored by pitch type</title>
+  return <svg className="plot" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Mean pitch velocity by date for ${pitcher.name}`}>
+    <title>Velocity by date, colored by pitch type</title>
     {[0, 1, 2, 3, 4].map(i => { const n = min + (max - min) * i / 4; return <g key={i}><line className="grid" x1={left} x2={width - right} y1={y(n)} y2={y(n)} /><text x={left - 10} y={y(n) + 3} textAnchor="end">{fmt(n, 0)}</text></g>; })}
     <rect x={recentX} y={top} width={Math.max(0, width - right - recentX)} height={height - top - bottom} fill="#eaf0df" fillOpacity=".55" />
     <text x={width - right} y="12" textAnchor="end">Recent window shaded · outing means may cross boundary</text>
-    {[...new Set(data.map(p => p.pitchType))].map(pitchType => { const series = data.filter(p => p.pitchType === pitchType).sort((a, b) => a.date.localeCompare(b.date)); return <g key={pitchType}><polyline points={series.map(p => `${x(p.date)},${y(p.velocity)}`).join(' ')} fill="none" stroke={pitchColor(pitchType)} strokeWidth="1.5" strokeOpacity=".75" />{series.map(p => <circle key={p.date} cx={x(p.date)} cy={y(p.velocity)} r="3" fill={pitchColor(pitchType)}><title>{pitchName(pitchType)} · {date(p.date)}: {fmt(p.velocity)} mph ({p.count} pitches)</title></circle>)}</g>; })}
+    {[...new Set(data.map(p => p.pitchType))].map(pitchType => { const series = data.filter(p => p.pitchType === pitchType).sort((a, b) => a.date.localeCompare(b.date)); return <g key={pitchType}><polyline points={series.map(p => `${x(p.date)},${y(p.velocity!)}`).join(' ')} fill="none" stroke={pitchColor(pitchType)} strokeWidth="1.5" strokeOpacity=".75" />{series.map(p => <circle key={p.date} cx={x(p.date)} cy={y(p.velocity!)} r="3" fill={pitchColor(pitchType)}><title>{pitchName(pitchType)} · {date(p.date)}: {fmt(p.velocity)} mph ({p.count} pitches)</title></circle>)}</g>; })}
     {labels.map(d => <text key={d} x={x(d)} y={height - 15} textAnchor="middle">{date(d)}</text>)}
   </svg>;
 }

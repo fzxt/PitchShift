@@ -3,20 +3,21 @@ export type PitchType = string;
 export interface Comparison {
   pitchType: PitchType; pitchName: string; metric: string; label: string;
   unit: string; baseline: number; recent: number; delta: number;
-  baselineN: number; recentN: number; score: number;
+  baselineN: number; recentN: number; score: number | null;
   interval: [number, number]; practicalThreshold: number; interpretation?: string;
 }
 export interface ArsenalPitch {
   pitchType: PitchType; name: string; color: string;
-  baselineCount: number; recentCount: number; baselineUsage: number; recentUsage: number;
+  baselineCount: number; recentCount: number; baselineUsage: number | null; recentUsage: number | null;
   baselineVelocity: number | null; recentVelocity: number | null;
 }
 export interface PitchPoint { type: PitchType; x: number | null; z: number | null; px: number | null; pz: number | null }
-export interface Outing { date: string; pitchType: PitchType; velocity: number; count: number }
+export interface Outing { date: string; pitchType: PitchType; velocity: number | null; count: number }
 export interface Pitcher {
   id: number; name: string; team: string; throws: string;
   recentCount: number; baselineCount: number;
-  baselineStart: string; baselineEnd: string; recentStart: string; recentEnd: string;
+  baselineStart: string | null; baselineEnd: string | null; recentStart: string | null; recentEnd: string | null;
+  baselineAppearances: number; recentAppearances: number; warnings: string[];
   status: 'review' | 'stable' | 'insufficient'; alerts: Comparison[];
   arsenal: ArsenalPitch[]; metrics: Comparison[];
   points: { baseline: PitchPoint[]; recent: PitchPoint[] }; timeline: Outing[];

@@ -12,14 +12,14 @@ export const finite = (n: unknown): n is number => typeof n === 'number' && Numb
 export const fmt = (n: number | null | undefined, digits = 1) => finite(n) ? n.toFixed(digits) : '—';
 export const count = (n: number) => n.toLocaleString('en-US');
 export const signed = (n: number | null | undefined, digits = 1) => finite(n) ? `${n > 0 ? '+' : n < 0 ? '−' : ''}${Math.abs(n).toFixed(digits)}` : '—';
-export function date(value: string | undefined, year = false) {
+export function date(value: string | null | undefined, year = false) {
   if (!value) return '—';
   const parsed = new Date(`${value.slice(0, 10)}T12:00:00Z`);
   return Number.isNaN(parsed.valueOf()) ? '—' : parsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', ...(year ? { year: 'numeric' } : {}), timeZone: 'UTC' });
 }
-export const dateRange = (a: string, b: string) => a === b ? date(a) : `${date(a)} – ${date(b)}`;
+export const dateRange = (a: string | null, b: string | null) => a === b ? date(a) : `${date(a)} – ${date(b)}`;
 export const metricValue = (n: number, metric: Comparison) => `${fmt(n)}${['pp', '%'].includes(metric.unit) ? '%' : metric.unit === 'in' ? '″' : ` ${metric.unit}`}`;
-export const strength = (p: Pitcher) => Math.max(0, ...p.alerts.map(a => a.score || 0));
+export const strength = (p: Pitcher) => Math.max(0, ...p.alerts.map(a => Math.abs(a.delta) / a.practicalThreshold));
 export function takeaway(p: Pitcher) {
   if (p.status === 'insufficient') return 'There are not enough pitches in one or both windows for a reliable comparison. Add more games before interpreting changes.';
   const a = p.alerts[0];
